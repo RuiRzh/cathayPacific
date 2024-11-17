@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录 - 国泰航空</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -127,7 +126,7 @@
                 sensors.login(userId);
             }
             // 如果登录方式为手机号，调用 Sensors Data 登录埋点
-            if (loginType === 'membership') {
+            if (loginType === 'phone') {
                 sensors.bind("$identity_mobile",userId);
             }
             
