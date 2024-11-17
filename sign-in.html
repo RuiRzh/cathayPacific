@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 国泰航空</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #0073e6;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        .form-container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+        a {
+            color: #0073e6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script charset="UTF-8" src="./sensorsdata.min.js"></script>
+    <script charset="UTF-8">
+    var sensors = window['sensorsDataAnalytic201505'];
+    sensors.init({
+      server_url: 'https://betadatasink.demo.sensorsdata.cn/sa?project=demo9',
+      heatmap:{scroll_notice_map:'not_collect'},
+      use_client_time:true,
+      send_type:'beacon',
+      show_log:true 
+    });
+    sensors.quick('autoTrack');
+    </script>
+</head>
+<body>
+    <header>
+        <h1>国泰航空 - 登录</h1>
+    </header>
+    <div class="form-container">
+        <h3>登录</h3>
+        <label for="loginType">登录方式：</label>
+        <select id="loginType" onchange="updateLoginPlaceholder()">
+            <option value="membership">会员编号</option>
+            <option value="phone">手机号</option>
+        </select>
+        <input type="text" id="loginInput" placeholder="请输入手机号" required>
+        <input type="password" id="password" placeholder="密码" required>
+        <button onclick="login()">登录</button>
+        <p>不是国泰会员？ <a href="./register.html">去注册</a></p>
+    </div>
+
+    <script>
+        function updateLoginPlaceholder() {
+            const loginType = document.getElementById('loginType').value;
+            const loginInput = document.getElementById('loginInput');
+            if (loginType === 'phone') {
+                loginInput.placeholder = '请输入手机号';
+            } else if (loginType === 'membership') {
+                loginInput.placeholder = '请输入会员编号';
+            }
+        }
+
+        function login() {
+            // 获取用户输入的会员编号或手机号
+            const loginType = document.getElementById('loginType').value;
+            const userId = document.getElementById('loginInput').value;
+            
+            // 如果登录方式为会员编号，调用 Sensors Data 登录埋点
+            if (loginType === 'membership') {
+                sensors.login(userId);
+            }
+            // 如果登录方式为手机号，调用 Sensors Data 登录埋点
+            if (loginType === 'membership') {
+                sensors.bind("$identity_mobile",userId);
+            }
+            
+            // 模拟登录验证成功
+            const title = 'Miss'; // 示例，实际应用中从数据库获取用户信息
+            const surname = '张'; // 示例
+            alert(`登录成功，欢迎！${title} ${surname}`);
+            sessionStorage.setItem('loggedIn', 'true');
+            sessionStorage.setItem('title', title);
+            sessionStorage.setItem('surname', surname);
+            console.log(sessionStorage);
+            window.location.href = './CathayPacific.html'; // 跳转回首页
+        }
+    </script>
+</body>
+</html>

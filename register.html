@@ -1,0 +1,66 @@
+
+<!-- 注册页 (register.html) -->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 国泰航空</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            padding: 20px;
+            color: black;
+            text-align: center;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>国泰航空 - 注册</h1>
+    </header>
+    <div class="form-container">
+        <h3>注册</h3>
+        <label for="title">称呼：</label>
+        <select id="title">
+            <option value="Miss">Miss</option>
+            <option value="Ms">Ms</option>
+            <option value="Mrs">Mrs</option>
+            <option value="Mr">Mr</option>
+        </select>
+        <input type="text" id="surname" placeholder="姓氏">
+        <input type="text" id="firstname" placeholder="名字">
+        <input type="email" id="email" placeholder="邮箱">
+        <input type="text" id="phone" placeholder="手机号">
+        <button onclick="register()">注册</button>
+    </div>
+
+    <script>
+        function register() {
+            const title = document.getElementById('title').value;
+            const surname = document.getElementById('surname').value;
+            const firstname = document.getElementById('firstname').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (title && surname && firstname && email && phone) {
+                alert('注册成功，请登录。');
+                window.location.href = './sign-in.html'; // 跳转到登录页面
+            } else {
+                alert('请填写所有必填信息。');
+            }
+        }
+    </script>
+</body>
+</html>

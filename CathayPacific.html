@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国泰航空首页</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-image: url('https://www.cathaypacific.com/content/dam/focal-point/digital-library/cn/gba/gba_offer_collection_1700x600.renditionimage.1700.600.jpg');
+            background-size: cover;
+            padding: 80px 20px;
+            color: black;
+            text-align: center;
+            position: relative;
+        }
+        #login-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .scenario {
+            margin: 40px auto;
+            padding: 20px;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .scenario h2 {
+            color: #333;
+        }
+        a {
+            color: #0073e6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0073e6;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+        .qrcode-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .qrcode-item {
+            text-align: center;
+        }
+        .qrcode-item img {
+            display: block;
+            margin: 0 auto;
+            width: 200px;
+            height: auto;
+        }
+    </style>
+    <script charset="UTF-8" src="./sensorsdata.min.js"></script>
+    <script charset="UTF-8">
+    var sensors = window['sensorsDataAnalytic201505'];
+    sensors.init({
+      server_url: 'https://betadatasink.demo.sensorsdata.cn/sa?project=demo9',
+      heatmap:{scroll_notice_map:'not_collect'},
+      use_client_time:true,
+      send_type:'beacon',
+      show_log:true 
+    });
+    sensors.quick('autoTrack');
+    </script>
+</head>
+<body>
+    <header>
+        <h1>国泰航空演示</h1>
+        <div id="login-panel"></div>
+    </header>
+    <div class="scenario">
+        <h2>场景一：打通用户登录前后及各端数据</h2>
+        <p>用户在未登录时，可通过页面右上角的登录/注册按钮进行登录。登录后，页面右上角会显示欢迎语</p>
+    </div>
+    <div class="scenario">
+        <h2>场景二：官网引流微信小程序</h2>
+        <p>神策支持 5 种小程序推广物料，分别是页面路径、链接、常规二维码、超长二维码。</p>
+        <p>企业主体小程序可在短信、邮件中使用小程序推广链接，用户点击后跳转小程序，完成小程序引流。</p>
+        <a href="https://w.slinking.cn/l/?k=HUd&sa_utm=E">https://w.slinking.cn/l/?k=HUd&sa_utm=E 小程序推广链接</a>
+        <p>小程序推广二维码常用于海报等推广方式推广小程序。以下示例，不同渠道跳转页面不同</p>
+        <div class="qrcode-container">
+            <div class="qrcode-item">
+                <p>官网引流二维码</p>
+                <img src="./websit_channel.png" alt="官网引流">
+            </div>
+            <div class="qrcode-item">
+                <p>文章&海报推广二维码</p>
+                <img src="./OfficialAccounts.png" alt="文章推广">
+            </div>
+        </div>
+    </div>
+    <div class="scenario">
+        <h2>场景三：官网订购机票</h2>
+        <form action="#" method="get">
+            <label for="origin">出发地：</label>
+            <input type="text" id="origin" name="origin" required>
+
+            <label for="destination">目的地：</label>
+            <input type="text" id="destination" name="destination" required>
+
+            <label for="type">类型：</label>
+            <select id="type" name="type" onchange="updateDateInput()">
+                <option value="round-trip">往返</option>
+                <option value="one-way">单程</option>
+            </select>
+
+            <div id="date-container"></div>
+
+            <button type="button" onclick="searchFlight()">搜索航班</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginPanel = document.getElementById('login-panel');
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                const title = sessionStorage.getItem('title');
+                const surname = sessionStorage.getItem('surname');
+                loginPanel.innerHTML = `<span>欢迎！${title} ${surname}</span>`;
+            } else {
+                loginPanel.innerHTML = '<button onclick="location.href=\'./sign-in.html\'" id="loginButton">登录 / 注册</button>';
+            }
+            updateDateInput();
+        });
+
+        function updateDateInput() {
+            const type = document.getElementById('type').value;
+            const dateContainer = document.getElementById('date-container');
+            if (type === 'round-trip') {
+                dateContainer.innerHTML = `
+                    <label for="date">出发日期：</label>
+                    <input type="date" id="date-start" name="date-start" required>
+                    <label for="return-date">回程日期：</label>
+                    <input type="date" id="date-end" name="date-end" required>
+                `;
+            } else {
+                dateContainer.innerHTML = `
+                    <label for="date">日期：</label>
+                    <input type="date" id="date" name="date" required>
+                `;
+            }
+        }
+
+        function formatDateTime(date) {
+            const formattedDate = date.getFullYear() + '-' +
+                                  ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                                  ('0' + date.getDate()).slice(-2) + ' ' +
+                                  ('0' + date.getHours()).slice(-2) + ':' +
+                                  ('0' + date.getMinutes()).slice(-2) + ':' +
+                                  ('0' + date.getSeconds()).slice(-2);
+            return formattedDate;
+        }
+
+        function searchFlight() {
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+            const type = document.getElementById('type').value;
+            const startDate = document.getElementById('date-start') ? document.getElementById('date-start').value : null;
+            const endDate = document.getElementById('date-end') ? document.getElementById('date-end').value : null;
+            const date = document.getElementById('date') ? document.getElementById('date').value : null;
+
+            if (!origin || !destination || (!startDate && !date) || (type === 'round-trip' && !endDate)) {
+                alert('请填写所有必填信息。');
+                return;
+            }
+
+            const results = [];
+            if (type === 'one-way') {
+                for (let i = 0; i < 4; i++) {
+                    const departureTime = new Date(date);
+                    departureTime.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+                    results.push({
+                        go: `${origin} -> ${destination} 出发时间: ${formatDateTime(departureTime)}`
+                    });
+                }
+            } else if (type === 'round-trip') {
+                for (let i = 0; i < 4; i++) {
+                    const departureTime = new Date(startDate);
+                    departureTime.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+                    const returnTime = new Date(endDate);
+                    returnTime.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+
+                    results.push({
+                        go: `${origin} -> ${destination} 出发时间: ${formatDateTime(departureTime)}`,
+                        back: `${destination} -> ${origin} 回程时间: ${formatDateTime(returnTime)}`
+                    });
+                }
+            }
+
+            sessionStorage.setItem('flightResults', JSON.stringify(results));
+            window.location.href = './booking.html';
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultContainer = document.getElementById('flight-results');
+            if (resultContainer && sessionStorage.getItem('flightResults')) {
+                const results = JSON.parse(sessionStorage.getItem('flightResults'));
+                resultContainer.innerHTML = results.map(result => `<div>${result.go}${result.back ? `<br>${result.back}` : ''}</div>`).join('');
+                sessionStorage.removeItem('flightResults');
+            }
+        });
+    </script>
+</body>
+</html>
